@@ -45,11 +45,17 @@ async def main():
     #Crawl the documentation
     res=tavily_crawl.invoke({"url":"https://python.langchain.com",
                              "max_depth":1,
-                             "extract_depth":"advanced"})
+                             "extract_depth":"advanced",
+                             "instructions":"Contents on AI agents"
+                             })                                                                                          
 
     all_docs=res["results"]
+    log_info(f"the contents {all_docs}") 
     log_success(f"Successfully crawled {len(all_docs)} documents from the website.")
-    log_info(f"the contents {all_docs}")
+
+    all_docs=[Document(page_content=result["raw_content"], metadata={"url":result["url"]}) for result in res['results'] if result["status"]== "success"]
+    log_success(f"Successfully extracted {len(all_docs)} documents from the website.")
+    
 
 if __name__ == "__main__":
     asyncio.run(main())
