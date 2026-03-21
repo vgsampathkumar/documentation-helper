@@ -1,4 +1,5 @@
 from typing import Any, Dict
+import os
 
 from dotenv import load_dotenv
 from langchain.agents import create_agent
@@ -15,7 +16,7 @@ embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
 #Initialize vector store
 vectorstore = PineconeVectorStore(
-    index_name="langchain-docs-2026", embedding=embeddings
+    index_name=os.getenv("PINECONE_INDEX_NAME"), embedding=embeddings
 )
 # Initialize chat model
 model = init_chat_model("gpt-5.2", model_provider="openai")
